@@ -463,7 +463,7 @@ class Job(models.Model):
         if not self.next_run:
             self.next_run = datetime.now()
         
-        delta = self.next_run - datetime.now()
+        delta = (self.next_run).replace(tzinfo=None) - datetime.now()
         if delta.days < 0:
             # The job is past due and should be run as soon as possible
             if self.check_is_running():
