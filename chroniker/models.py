@@ -443,7 +443,7 @@ class Job(models.Model):
     def is_fresh(self):
         return not self.is_running or (
             self.is_running and self.last_heartbeat
-            and self.last_heartbeat >= datetime.now() - timedelta(minutes=5)
+            and self.last_heartbeat >= datetime.now().replace(tzinfo=None) - timedelta(minutes=5).replace(tzinfo=None)
         )
     is_fresh.boolean = True
 
@@ -583,7 +583,7 @@ class Job(models.Model):
         False
         """
         reqs =  (
-            self.next_run <= datetime.now()
+            self.next_run.replace(tzinfo=None) <= datetime.now().replace(tzinfo=None)
             and self.enabled
             and self.check_is_running() == False
         )
